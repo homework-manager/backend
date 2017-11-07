@@ -1,9 +1,10 @@
-module.exports = () => new Promise((resolve, reject) => {
+module.exports = () => new Promise(async (resolve, reject) => {
   const LOG_PREFIX = '[express] '
+  const PORT = process.env.PORT
 
   const log = require('./../utils/logger.js').log
 
-  if(!process.env.PORT){
+  if(!PORT){
     log(LOG_PREFIX + 'No PORT env variable...terminating')
     reject()
     return
@@ -12,6 +13,8 @@ module.exports = () => new Promise((resolve, reject) => {
   const express = require('express')
   const app = express()
 
+  const bodyParser = require('body-parser')
+
   // Fix for cross-origin
   app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
@@ -19,14 +22,26 @@ module.exports = () => new Promise((resolve, reject) => {
     next()
   })
 
-  app.get('/data', (req, res) => {
-    log(LOG_PREFIX + "Request at /data")
-    res.send({
-      data: 'useful data'
-    })
-  })
+  // Support for JSON requests
+  app.use(bodyParser.json())
 
-  app.listen(process.env.PORT, () => {
+  // Passport
+  await require('./passport.js')(app)
+
+  const passport = require('passport')
+
+  // Routes
+  app.get('/data', require('./routes/dummy.js'))
+
+  const login = require('./routes/login.js')
+
+  app.get('/login/session', login.isLoggedIn)
+  app.post('/login/session', passport.authenticate('local'), login.login)
+  app.delete('/login/session', login.logout)
+
+  app.post('/login/account', require('./routes/register.js').register)
+
+  app.listen(PORT, () => {
     log(LOG_PREFIX + 'Listening in port ' + process.env.PORT)    
     resolve()
   })

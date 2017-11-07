@@ -1,5 +1,5 @@
-module.exports = {
-  log: msg => {
-    console.log(msg)
-  }
+module.exports = {}
+
+module.exports.log = msg => {
+  console.log(msg)
 }

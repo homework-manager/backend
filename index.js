@@ -2,7 +2,8 @@ const LOG_PREFIX = '[main] '
 
 const log = require('./utils/logger.js').log
 
-require('./config/express.js')()
+require('./config/mongo.js')()
+  .then(require('./config/express.js'))
   .then(() => {
     log(LOG_PREFIX + 'Started.')
   })
