@@ -5,7 +5,8 @@ module.exports = () => {
       res.status(200).json({
         success: true,
         profile: {
-          username: req.user.username
+          username: req.user.username,
+          email: req.user.email
         }
       })
     }
