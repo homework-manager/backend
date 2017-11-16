@@ -13,36 +13,38 @@ module.exports = () => new Promise(async (resolve, reject) => {
   const express = require('express')
   const app = express()
 
-  const bodyParser = require('body-parser')
-
   // Fix for cross-origin
   app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "X-Requested-With")
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+    res.header("Access-Control-Allow-Credentials", "true")
     next()
   })
 
   // Support for JSON requests
+  const bodyParser = require('body-parser')
+
   app.use(bodyParser.json())
 
   // Passport
-  await require('./passport.js')(app)
+  require('./passport.js')(app)
 
   const passport = require('passport')
 
   // Routes
-  app.get('/data', require('./routes/dummy.js'))
-
-  const login = require('./routes/login.js')
-
-  app.get('/login/session', login.isLoggedIn)
-  app.post('/login/session', passport.authenticate('local'), login.login)
+  const login = require('./routes/login.js')()
+  const register = require('./routes/register.js')()
+  const profile = require('./routes/profile.js')()
+  
+  app.post('/login/session', login.login)
   app.delete('/login/session', login.logout)
 
-  app.post('/login/account', require('./routes/register.js').register)
+  app.post('/login/account', register.register)
+
+  app.get('/login/profile', passport.authenticate('jwt', {session: false}), profile.getProfile)
 
   app.listen(PORT, () => {
-    log(LOG_PREFIX + 'Listening in port ' + process.env.PORT)    
+    log(LOG_PREFIX + 'Listening in port ' + process.env.PORT)
     resolve()
   })
 })
