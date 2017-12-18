@@ -3,6 +3,11 @@ module.exports = () => {
 
   return {
 
+    checkSession: (req, res) =>
+      res.status(200).json({
+        success: true
+      }),
+
     login: async (req, res) => {
       const jwt = require('jsonwebtoken')
       const User = require('./../schemas/User.js')

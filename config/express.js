@@ -36,6 +36,7 @@ module.exports = () => new Promise(async (resolve, reject) => {
   const register = require('./routes/register.js')()
   const profile = require('./routes/profile.js')()
   
+  app.get('/login/session', passport.authenticate('jwt', {session: false}), login.checkSession)
   app.post('/login/session', login.login)
   app.delete('/login/session', login.logout)
 
