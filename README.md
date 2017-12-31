@@ -1,12 +1,13 @@
-# homework-manager-backend
+# homework-manager/backend
 
 ## Developing
 Make sure that you have [Node](https://nodejs.org) installed.
 Clone the project and cd into its folder.
 
 ```shell
-git clone https://github.com/makmm/homework-manager-backend
-cd homework-manager-backend
+mkdir homework-manager
+git clone https://github.com/homework-manager/backend homework-manager/backend
+cd homework-manager/backend
 ```
 
 Next, install dependencies.
