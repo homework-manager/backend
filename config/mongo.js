@@ -5,7 +5,7 @@ module.exports = () => new Promise((resolve, reject) => {
   const log = require('./../utils/logger.js').log
 
   if(!DB_HOST){
-    log(LOG_PREFIX + 'No DB_HOST env variable...stopping')
+    log(LOG_PREFIX + 'No DB_HOST env variable...terminating')
     reject()
     return
   }
