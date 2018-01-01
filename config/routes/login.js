@@ -3,10 +3,26 @@ module.exports = () => {
 
   return {
 
+    /*
+     * This path will return 200 if the
+     * user is logged in
+     * or 400 if not logged in
+     */
+
     checkSession: (req, res) =>
       res.status(200).json({
         success: true
       }),
+
+    /*
+     * This path can only return 2 things 
+     * if it went succesfully:
+     * 200 or 401
+     * 200 means that the session has been created
+     * and a token is attached to it
+     * 401 means that the username or password
+     * is wrong.
+     */
 
     login: async (req, res) => {
       const jwt = require('jsonwebtoken')
@@ -50,6 +66,12 @@ module.exports = () => {
         })
       }
     },
+
+    /*
+     * This path will return 200 if the
+     * user succesfully logged out
+     * or 400 if not logged in.
+     */
 
     logout: (req, res) => {
       if(req.user){
