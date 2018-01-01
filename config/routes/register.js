@@ -6,7 +6,9 @@ module.exports = () => {
       const User = require('./../schemas/User.js')
 
       // TODO: Username & password verification
+      // is there a username on the first place?
       // (does it have enough chars? what chars on username?)
+      // (data requirements are in the info repo)
 
       const existingUserWithUsername = await User.findOne({
         username: req.body.username
