@@ -35,7 +35,7 @@ module.exports = (app) => new Promise(async (resolve, reject) => {
       if(user){
         return done(null, user)
       } else {
-        return done(null, false)
+        return done(null, false, {success: false})
       }
     }))
   } catch(err){
