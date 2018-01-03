@@ -77,7 +77,7 @@ module.exports = () => {
      */
 
     logout: (req, res) => {
-      if(req.user){
+      if(req.logout){
         req.logout()
         res.status(200).json({
           success: true
