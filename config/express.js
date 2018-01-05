@@ -38,13 +38,17 @@ module.exports = () => new Promise(async (resolve, reject) => {
   const login = require('./routes/login.js')()
   const register = require('./routes/register.js')()
   const profile = require('./routes/profile.js')()
-  
+  const groups = require('./routes/groups.js')()
+
   app.get('/login/session', protectedRoute(), login.checkSession)
   app.post('/login/session', login.login)
 
   app.post('/login/account', register.register)
 
   app.get('/login/profile', protectedRoute(), profile.getProfile)
+
+  app.post('/group', protectedRoute(), groups.createGroup)
+  app.post('/group/join', protectedRoute(), groups.joinGroup)
 
   app.listen(PORT, () => {
     log(LOG_PREFIX + 'Listening in port ' + process.env.PORT)
