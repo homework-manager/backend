@@ -33,16 +33,18 @@ module.exports = () => new Promise(async (resolve, reject) => {
   const passport = require('passport')
 
   // Routes
+  const protectedRoute = () => passport.authenticate('jwt', {session: false})
+
   const login = require('./routes/login.js')()
   const register = require('./routes/register.js')()
   const profile = require('./routes/profile.js')()
   
-  app.get('/login/session', passport.authenticate('jwt', {session: false}), login.checkSession)
+  app.get('/login/session', protectedRoute(), login.checkSession)
   app.post('/login/session', login.login)
 
   app.post('/login/account', register.register)
 
-  app.get('/login/profile', passport.authenticate('jwt', {session: false}), profile.getProfile)
+  app.get('/login/profile', protectedRoute(), profile.getProfile)
 
   app.listen(PORT, () => {
     log(LOG_PREFIX + 'Listening in port ' + process.env.PORT)
