@@ -9,10 +9,11 @@ module.exports = () => {
      * or 400 if not logged in
      */
 
-    checkSession: (req, res) =>
-      res.status(200).json({
+    checkSession (req, res) {
+      return res.status(200).json({
         success: true
-      }),
+      })
+    },
 
     /*
      * This path can only return 2 things 
@@ -24,7 +25,7 @@ module.exports = () => {
      * is wrong.
      */
 
-    login: async (req, res) => {
+    async login (req, res) {
       const jwt = require('jsonwebtoken')
       const User = require('./../schemas/User.js')
       const passwords = require('./../../utils/passwords.js')
