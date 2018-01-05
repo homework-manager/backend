@@ -68,29 +68,6 @@ module.exports = () => {
           }
         })
       }
-    },
-
-    /*
-     * This path will return 200 if the
-     * user succesfully logged out
-     * or 400 if not logged in.
-     */
-
-    logout: (req, res) => {
-      if(req.logout){
-        req.logout()
-        res.status(200).json({
-          success: true
-        })
-        return
-      }
-
-      res.status(400).json({
-        success: false,
-        error: {
-          notLoggedIn: 'You are not logged in, so don\'t even try logging out!'
-        }
-      })
     }
 
   }

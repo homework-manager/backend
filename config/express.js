@@ -39,7 +39,6 @@ module.exports = () => new Promise(async (resolve, reject) => {
   
   app.get('/login/session', passport.authenticate('jwt', {session: false}), login.checkSession)
   app.post('/login/session', login.login)
-  app.delete('/login/session', login.logout)
 
   app.post('/login/account', register.register)
 
