@@ -9,10 +9,11 @@ module.exports = () => {
      * or 400 if not logged in
      */
 
-    checkSession: (req, res) =>
-      res.status(200).json({
+    checkSession (req, res) {
+      return res.status(200).json({
         success: true
-      }),
+      })
+    },
 
     /*
      * This path can only return 2 things 
@@ -24,7 +25,7 @@ module.exports = () => {
      * is wrong.
      */
 
-    login: async (req, res) => {
+    async login (req, res) {
       const jwt = require('jsonwebtoken')
       const User = require('./../schemas/User.js')
       const passwords = require('./../../utils/passwords.js')
@@ -68,29 +69,6 @@ module.exports = () => {
           }
         })
       }
-    },
-
-    /*
-     * This path will return 200 if the
-     * user succesfully logged out
-     * or 400 if not logged in.
-     */
-
-    logout: (req, res) => {
-      if(req.user){
-        req.logout()
-        res.status(200).json({
-          success: true
-        })
-        return
-      }
-
-      res.status(400).json({
-        success: false,
-        error: {
-          notLoggedIn: 'You are not logged in, so don\'t even try logging out!'
-        }
-      })
     }
 
   }

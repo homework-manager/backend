@@ -16,6 +16,7 @@ module.exports = () => new Promise(async (resolve, reject) => {
   // Fix for cross-origin
   app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "http://localhost:8080")
+    res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
     res.header("Access-Control-Allow-Credentials", "true")
     next()
@@ -32,17 +33,22 @@ module.exports = () => new Promise(async (resolve, reject) => {
   const passport = require('passport')
 
   // Routes
+  const protectedRoute = () => passport.authenticate('jwt', {session: false})
+
   const login = require('./routes/login.js')()
   const register = require('./routes/register.js')()
   const profile = require('./routes/profile.js')()
-  
-  app.get('/login/session', passport.authenticate('jwt', {session: false}), login.checkSession)
+  const groups = require('./routes/groups.js')()
+
+  app.get('/login/session', protectedRoute(), login.checkSession)
   app.post('/login/session', login.login)
-  app.delete('/login/session', login.logout)
 
   app.post('/login/account', register.register)
 
-  app.get('/login/profile', passport.authenticate('jwt', {session: false}), profile.getProfile)
+  app.get('/login/profile', protectedRoute(), profile.getProfile)
+
+  app.post('/group', protectedRoute(), groups.createGroup)
+  app.post('/group/join', protectedRoute(), groups.joinGroup)
 
   app.listen(PORT, () => {
     log(LOG_PREFIX + 'Listening in port ' + process.env.PORT)
