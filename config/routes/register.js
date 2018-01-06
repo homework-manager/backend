@@ -1,12 +1,12 @@
 module.exports = () => {
-  
+
   return {
 
     register: async (req, res) => {
       const User = require('./../schemas/User.js')
 
       // TODO: Username & password verification
-      // is there a username on the first place?
+      // is there a username on the first place? or email, or password?
       // (does it have enough chars? what chars on username?)
       // (data requirements are in the info repo)
 
@@ -14,25 +14,27 @@ module.exports = () => {
         username: req.body.username
       })
 
-      if(existingUserWithUsername)
+      if (existingUserWithUsername) {
         return res.status(409).json({
           success: false,
-          error: {
+          errors: {
             existingUsername: 'Username is already being used.'
           }
         })
+      }
 
       const existingUserWithEmail = await User.findOne({
         email: req.body.email
       })
 
-      if(existingUserWithEmail)
+      if (existingUserWithEmail) {
         return res.status(409).json({
           success: false,
-          error: {
+          errors: {
             existingEmail: 'Email is already being used.'
           }
         })
+      }
 
       let newUser = new User({
         username: req.body.username,
