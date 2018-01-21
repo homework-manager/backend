@@ -19,9 +19,13 @@ groupSchema.methods.addMember = function(memberId){
     return member
   }
 
-  this.members.push({
+  const newMember = {
     id: memberId
-  })
+  }
+
+  this.members.push(newMember)
+
+  return newMember
 }
 
 module.exports = mongoose.model('Group', groupSchema)

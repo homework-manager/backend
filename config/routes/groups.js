@@ -44,7 +44,7 @@ module.exports = () => {
 
       newGroup.name = groupInfo.name
       newGroup.joinName = groupInfo.joinName
-      newGroup.private = groupInfo.private || true
+      newGroup.private = groupInfo.private != undefined ? groupInfo.private : true
       newGroup.members = [
         {
           id: req.user._id,
@@ -68,6 +68,15 @@ module.exports = () => {
       const groupToJoin = await Group.findOne({
         joinName: req.body.joinName
       })
+
+      if (!groupToJoin) {
+        return res.status(404).json({
+          success: false,
+          errors: {
+            groupDoesntExist: 'This group doesn\'t exist.'
+          }
+        })
+      }
 
       if (groupToJoin.private) {
         return res.status(400).json({
