@@ -19,17 +19,7 @@ module.exports = () => {
       // TODO: Check that joinname is alphanumerical
       // and doesn't contain spaces
 
-      const groupWithName = await Group.findOne({name: groupInfo.name})
       const groupWithJoinName = await Group.findOne({joinName: groupInfo.joinName})
-
-      if (groupWithName) {
-        return res.status(409).json({
-          success: false,
-          errors: {
-            nameAlreadyUsed: 'There\'s already a group with that name.'
-          }
-        })
-      }
 
       if (groupWithJoinName) {
         return res.status(409).json({
