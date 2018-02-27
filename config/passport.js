@@ -9,7 +9,7 @@ module.exports = (app) => new Promise(async (resolve, reject) => {
     log(LOG_PREFIX + 'Warning: No JWT_SECRET env variable...')
     log(LOG_PREFIX + 'Going to continue with \'' + JWT_SECRET + '\', because on dev env...')
   } else if(!process.env.JWT_SECRET){
-    log(LOG_PREFIX + 'No JWT_SECRET env variable and on prod...terminating')
+    log(LOG_PREFIX + 'No JWT_SECRET env variable and on prod env...terminating')
     reject()
     return
   }
