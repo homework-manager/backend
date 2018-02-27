@@ -12,7 +12,7 @@ module.exports = () => new Promise((resolve, reject) => {
 
   const mongoose = require('mongoose')
 
-  mongoose.connect(DB_HOST, {useMongoClient: true})
+  mongoose.connect(DB_HOST, {})
   mongoose.Promise = global.Promise
 
   const db = mongoose.connection
