@@ -14,8 +14,6 @@ module.exports = () => {
         groupId: groups.map(group => group._id)
       })
 
-      console.log(homeworks)
-
       res.status(200).json({
         success: true,
         homeworks
@@ -123,6 +121,47 @@ module.exports = () => {
         homework: newHomework
       })
 
+    },
+
+    async markAsDone (req, res) {
+      const homeworkId = req.body.homeworkId
+
+      if (!homeworkId) {
+
+        return res.status(400).json({
+          success: false,
+          errors: {
+            notValidRequest: true,
+            message: 'Your code is broken.'
+          }
+        })
+
+      }
+
+      const homework = await Homework.findOne({
+        _id: homeworkId
+      })
+
+      if (!homework) {
+
+        return res.status(404).json({
+          success: false,
+          errors: {
+            homeworkDoesntExist: true,
+            message: 'The requested homework doesn\'t exist.'
+          }
+        })
+
+      }
+
+      homework.markUserAsDone(req.user._id)
+
+      await homework.save()
+
+      res.status(200).json({
+        success: true,
+        homework
+      })
     }
 
   }

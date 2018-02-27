@@ -67,6 +67,11 @@ module.exports = {
       protectedRoute(),
       homeworks.getHomeworks,
       handleUnauthorized)
+    app.post(
+      '/homework/done',
+      protectedRoute(),
+      homeworks.markAsDone,
+      handleUnauthorized)
 
   }
 }
