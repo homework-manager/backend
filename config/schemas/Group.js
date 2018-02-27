@@ -1,26 +1,41 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
+const ObjectId = mongoose.Schema.Types.ObjectId
 
-const passwords = require('../../utils/passwords.js')
+const User = require('./User.js')
+
+let groupMemberSchema = mongoose.Schema({
+  id: ObjectId,
+  roles: Array
+}, {
+  _id: false
+})
+
+groupMemberSchema.methods.getUser = async function () {
+  const user = await User.findOne({_id: this.id})
+
+  return user.getPublicData()
+}
 
 let groupSchema = mongoose.Schema({
   name: String,
   joinName: String,
   private: Boolean,
-  members: Array
+  members: [groupMemberSchema]
 })
 
-groupSchema.methods.addMember = function(memberId){
+groupSchema.methods.addMember = function(memberId, roles){
   const member = this.members.find(
-    obj => obj.id === memberId
+    obj => memberId.equals(obj.id)
   )
 
-  if (member) {
+  if (member) { // check if member already exists
     return member
   }
 
   const newMember = {
-    id: memberId
+    id: memberId,
+    roles
   }
 
   this.members.push(newMember)

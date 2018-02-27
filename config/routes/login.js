@@ -16,7 +16,7 @@ module.exports = () => {
     },
 
     /*
-     * This path can only return 2 things 
+     * This path can only return 2 things
      * if it went succesfully:
      * 200 or 401
      * 200 means that the session has been created
@@ -32,7 +32,7 @@ module.exports = () => {
 
       const username = req.body.username
       const password = req.body.password
-      
+
       // TODO: Check if there is even a username or password
       // It errors if it doesn't
 
@@ -43,8 +43,9 @@ module.exports = () => {
       if(!user)
         return res.status(401).json({
           success: false,
-          errors: {
-            wrongUsernameOrPassword: 'Wrong username or password.'
+          error: {
+            wrongUsernameOrPassword: true,
+            message: 'Wrong username or password.'
           }
         })
 
@@ -64,8 +65,9 @@ module.exports = () => {
       } else {
         res.status(401).json({
           success: false,
-          errors: {
-            wrongUsernameOrPassword: 'Wrong username or password.'
+          error: {
+            wrongUsernameOrPassword: true,
+            message: 'Wrong username or password.'
           }
         })
       }

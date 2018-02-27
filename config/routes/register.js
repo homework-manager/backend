@@ -17,8 +17,9 @@ module.exports = () => {
       if (existingUserWithUsername) {
         return res.status(409).json({
           success: false,
-          errors: {
-            existingUsername: 'Username is already being used.'
+          error: {
+            existingUsername: true,
+            message: 'Username is already being used.'
           }
         })
       }
@@ -30,8 +31,9 @@ module.exports = () => {
       if (existingUserWithEmail) {
         return res.status(409).json({
           success: false,
-          errors: {
-            existingEmail: 'Email is already being used.'
+          error: {
+            existingEmail: true,
+            message: 'Email is already being used.'
           }
         })
       }

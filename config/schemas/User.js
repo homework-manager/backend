@@ -9,8 +9,14 @@ let userSchema = mongoose.Schema({
   email: String
 })
 
-userSchema.methods.changePassword = async function(password){
+userSchema.methods.changePassword = async function (password) {
   this.password = await passwords.hashPassword(password)
+}
+
+userSchema.methods.getPublicData = function () {
+  return {
+    username: this.username
+  }
 }
 
 module.exports = mongoose.model('User', userSchema)
