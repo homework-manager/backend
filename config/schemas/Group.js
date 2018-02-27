@@ -24,7 +24,7 @@ let groupSchema = mongoose.Schema({
   members: [groupMemberSchema]
 })
 
-groupSchema.methods.addMember = function(memberId, roles){
+groupSchema.methods.addMember = function (memberId, roles) {
   const member = this.members.find(
     obj => memberId.equals(obj.id)
   )
