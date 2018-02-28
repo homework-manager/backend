@@ -41,7 +41,7 @@ module.exports = () => {
             message: 'You didn\'t specify any password.'
           }
         })
-      } else if (!accountInfo.username.test(/^[a-zA-Z0-9_]{1,16}$/)) {
+      } else if (!(/^[a-zA-Z0-9_]{1,16}$/.test(accountInfo.username))) {
         return res.status(400).json({
           success: false,
           error: {
@@ -49,7 +49,7 @@ module.exports = () => {
             message: 'The username is invalid. It can only contain letters, numbers or underscores and must be 16 characters or less.'
           }
         })
-      } else if (!accountInfo.email.test(/^[A-Z0-9._%+-]{1,32}@[A-Z0-9._]{4,32}$/i)) {
+      } else if (!(/^[A-Z0-9._%+-]{1,32}@[A-Z0-9._]{4,32}$/i.test(accountInfo.email))) {
         return res.status(400).json({
           success: false,
           error: {
@@ -57,7 +57,7 @@ module.exports = () => {
             message: 'The email is invalid.'
           }
         })
-      } else if (!accountInfo.password.test(/^.{6}$/)) {
+      } else if (!(/^.{6}$/.test(accountInfo.password))) {
         return res.status(400).json({
           success: false,
           error: {
@@ -96,11 +96,11 @@ module.exports = () => {
       }
 
       let newUser = new User({
-        username: req.body.username,
-        email: req.body.email
+        username: accountInfo.username,
+        email: accountInfo.email
       })
 
-      await newUser.changePassword(req.body.password)
+      await newUser.changePassword(accountInfo.password)
 
       await newUser.save()
 
