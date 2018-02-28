@@ -7,10 +7,65 @@ module.exports = () => {
     register: async (req, res) => {
       const User = require('./../schemas/User.js')
 
-      // TODO: Username & password verification
-      // is there a username on the first place? or email, or password?
-      // (does it have enough chars? what chars on username?)
-      // (data requirements are in the info repo)
+      const accountInfo = req.body.accountInfo
+
+      if (!accountInfo) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidRequest: true,
+            message: 'Your code is broken.'
+          }
+        })
+      } else if (!accountInfo.username) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            noUsername: true,
+            message: 'You didn\'t specify any username.'
+          }
+        })
+      } else if (!accountInfo.email) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            noEmail: true,
+            message: 'You didn\'t specify any email.'
+          }
+        })
+      } else if (!accountInfo.password) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            noPassword: true,
+            message: 'You didn\'t specify any password.'
+          }
+        })
+      } else if (!accountInfo.username.test(/^[a-zA-Z0-9_]{1,16}$/)) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidUsername: true,
+            message: 'The username is invalid. It can only contain letters, numbers or underscores and must be 16 characters or less.'
+          }
+        })
+      } else if (!accountInfo.email.test(/^[A-Z0-9._%+-]{1,32}@[A-Z0-9._]{4,32}$/i)) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidEmail: true,
+            message: 'The email is invalid.'
+          }
+        })
+      } else if (!accountInfo.password.test(/^.{6}$/)) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidPassword: true,
+            message: 'The password is invalid. It must be at least 6 characters.'
+          }
+        })
+      }
 
       const existingUserWithUsername = await User.findOne({
         username: req.body.username
