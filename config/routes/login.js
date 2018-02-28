@@ -35,9 +35,6 @@ module.exports = () => {
       const username = req.body.username
       const password = req.body.password
 
-      // TODO: Check if there is even a username or password
-      // It errors if it doesn't
-
       const user = await User.findOne({
         username: username
       })
