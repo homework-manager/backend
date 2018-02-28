@@ -1,6 +1,8 @@
 module.exports = () => {
   const JWT_SECRET = process.env.JWT_SECRET || 'dev waffles'
 
+  // TODO: document endpoints of this file
+
   return {
 
     /*

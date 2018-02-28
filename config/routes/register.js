@@ -1,5 +1,7 @@
 module.exports = () => {
 
+  // TODO: document endpoints of this file
+
   return {
 
     register: async (req, res) => {
