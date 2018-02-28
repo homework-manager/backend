@@ -9,7 +9,7 @@ module.exports = {
         }
       })
 
-    const protectedRoute = handler =>
+    const protectedRoute = () =>
       passport.authenticate(
         'jwt', {
           session: false,
@@ -22,61 +22,99 @@ module.exports = {
     const groups = require('./groups.js')()
     const homeworks = require('./homeworks.js')()
 
-    app.get(
-      '/login/session',
-      protectedRoute(login.checkSession),
-      login.checkSession,
-      handleUnauthorized)
-    app.post(
-      '/login/session',
-      login.login)
+    const routes = [
+      {
+        path: '/login/session',
+        method: 'get',
+        handler: login.checkSession,
+        protected: true
+      },
+      {
+        path: '/login/session',
+        method: 'post',
+        handler: login.login
+      },
 
-    app.post(
-      '/login/account',
-      register.register)
+      {
+        path: '/login/account',
+        method: 'post',
+        handler: register.register
+      },
 
-    app.get(
-      '/login/profile',
-      protectedRoute(),
-      profile.getProfile,
-      handleUnauthorized)
+      {
+        path: '/login/profile',
+        method: 'get',
+        handler: profile.getProfile,
+        protected: true
+      },
+      // TODO: endpoint to edit profile
 
-    app.post(
-      '/group',
-      protectedRoute(),
-      groups.createGroup,
-      handleUnauthorized)
-    app.post(
-      '/group/join',
-      protectedRoute(),
-      groups.joinGroup,
-      handleUnauthorized)
-    app.get(
-      '/groups',
-      protectedRoute(),
-      groups.getGroups,
-      handleUnauthorized)
+      {
+        path: '/group',
+        method: 'post',
+        handler: groups.createGroup,
+        protected: true
+      },
+      {
+        path: '/group/join',
+        method: 'post',
+        handler: groups.joinGroup,
+        protected: true
+      },
+      {
+        path: '/groups',
+        method: 'get',
+        handler: groups.getGroups,
+        protected: true
+      },
 
-    app.put(
-      '/homework',
-      protectedRoute(),
-      homeworks.createHomework,
-      handleUnauthorized)
-    app.get(
-      '/homeworks',
-      protectedRoute(),
-      homeworks.getHomeworks,
-      handleUnauthorized)
-    app.patch(
-      '/homework/done',
-      protectedRoute(),
-      homeworks.markAsDone,
-      handleUnauthorized)
-    app.patch(
-      '/homework/notDone',
-      protectedRoute(),
-      homeworks.markAsNotDone,
-      handleUnauthorized)
+      {
+        path: '/homework',
+        method: 'put',
+        handler: homeworks.createHomework,
+        protected: true
+      },
+      {
+        path: '/homework',
+        method: 'delete',
+        handler: homeworks.deleteHomework,
+        protected: true
+      },
+      {
+        path: '/homeworks',
+        method: 'get',
+        handler: homeworks.getHomeworks,
+        protected: true
+      },
+      {
+        path: '/homework/done',
+        method: 'patch',
+        handler: homeworks.markAsDone,
+        protected: true
+      },
+      {
+        path: '/homework/notDone',
+        method: 'patch',
+        handler: homeworks.markAsNotDone,
+        protected: true
+      }
+    ]
+
+    for (route of routes) {
+      if (route.protected) {
+        app[route.method](
+          route.path,
+          protectedRoute(),
+          route.handler,
+          handleUnauthorized
+        )
+      } else {
+        app[route.method](
+          route.path,
+          route.handler
+        )
+      }
+    }
 
   }
 }

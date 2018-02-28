@@ -164,6 +164,7 @@ module.exports = () => {
       })
     },
 
+
     async markAsNotDone (req, res) {
       const homeworkId = req.body.homeworkId
 
@@ -202,6 +203,44 @@ module.exports = () => {
       res.status(200).json({
         success: true,
         homework
+      })
+    },
+
+    async deleteHomework (req, res) {
+      const homeworkId = req.body.homeworkId
+
+      if (!homeworkId) {
+
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidRequest: true,
+            message: 'Your code is broken.'
+          }
+        })
+
+      }
+
+      const homework = await Homework.findOne({
+        _id: homeworkId
+      })
+
+      if (!homework) {
+
+        return res.status(404).json({
+          success: false,
+          error: {
+            homeworkDoesntExist: true,
+            message: 'The requested homework doesn\'t exist.'
+          }
+        })
+
+      }
+
+      await Homework.remove({_id: homeworkId})
+
+      res.status(200).json({
+        success: true
       })
     }
 
