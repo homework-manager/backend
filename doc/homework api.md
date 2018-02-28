@@ -17,7 +17,7 @@ The `description` string must be under 5000 characters (isn't yet checked in the
 
 | Error name | What it means |
 | :--------- | :------------ |
-| `notValidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `homework` object or your `homework` object doesn't have a `groupId`. |
+| `invalidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `homework` object or your `homework` object doesn't have a `groupId`. |
 | `noTitle` | There isn't a `title` property on your `homework` object or it is empty. |
 | `tooLongTitle` | The `title` value is over 200 characters. |
 | `tooLongDescription` | The `description` value is over 5000 characters. |
@@ -63,7 +63,7 @@ Returns all homeworks of the user.
 
 | Error name | What it means |
 | :--------- | :------------ |
-| `notValidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `homeworkId`. |
+| `invalidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `homeworkId`. |
 | `homeworkDoesntExist` | You know what it means |
 
 ## `/homework/notDone`
@@ -76,5 +76,5 @@ Returns all homeworks of the user.
 
 | Error name | What it means |
 | :--------- | :------------ |
-| `notValidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `homeworkId`. |
+| `invalidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `homeworkId`. |
 | `homeworkDoesntExist` | You know what it means |

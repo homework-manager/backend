@@ -16,7 +16,7 @@ The `joinName` string must be alphanumerical and don't contain spaces (isn't yet
 
 | Error name | What it means |
 | :--------- | :------------ |
-| `notValidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `group` object. |
+| `invalidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `group` object. |
 | `noName` | There isn't a `name` property on your `group` object or it is empty. |
 | `noJoinName` | There isn't a `joinName` property on your `group` object or it is empty. |
 | `tooLongName` | The `name` value is over 100 characters. |
