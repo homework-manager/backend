@@ -47,10 +47,15 @@ module.exports = () => {
             message: 'The join name must be below 50 characters.'
           }
         })
+      } else if (!groupinfo.joinName.test(/^[a-z0-9]+$/i)) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidJoinName: true,
+            message: 'The join name is invalid. It must be alphanumerical and not contain spaces.'
+          }
+        })
       }
-
-      // TODO: Check that joinname is alphanumerical
-      // and doesn't contain spaces
 
       const groupWithJoinName = await Group.findOne({joinName: groupInfo.joinName})
 
