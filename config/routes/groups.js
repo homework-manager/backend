@@ -10,7 +10,7 @@ module.exports = () => {
       if (!groupInfo) {
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             notValidRequest: true,
             message: 'Your code is broken.'
           }
@@ -18,7 +18,7 @@ module.exports = () => {
       } else if (!groupInfo.name) {
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             noName: true,
             message: 'You didn\'t specify any name.'
           }
@@ -26,7 +26,7 @@ module.exports = () => {
       } else if (!groupInfo.joinName) {
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             noJoinName: true,
             message: 'You didn\'t specify any join name.'
           }
@@ -34,7 +34,7 @@ module.exports = () => {
       } else if (groupInfo.name.length > 100) {
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             tooLongName: true,
             message: 'The name must be below 100 characters.'
           }

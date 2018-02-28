@@ -27,7 +27,7 @@ module.exports = () => {
 
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             notValidRequest: true,
             message: 'Your code is broken.'
           }
@@ -37,7 +37,7 @@ module.exports = () => {
 
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             noTitle: true,
             message: 'You didn\'t specify any title for the homework.'
           }
@@ -47,7 +47,7 @@ module.exports = () => {
 
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             tooLongTitle: true,
             message: 'The title must be below 200 characters.'
           }
@@ -76,7 +76,7 @@ module.exports = () => {
 
         return res.status(404).json({
           success: false,
-          errors: {
+          error: {
             groupDoesntExist: true,
             message: 'There\'s no group matching that id.'
           }
@@ -97,7 +97,7 @@ module.exports = () => {
 
         return res.status(403).json({
           success: false,
-          errors: {
+          error: {
             forbidden: true,
             message: 'You don\'t have permission to add homeworks on this group.'
           }
@@ -130,7 +130,7 @@ module.exports = () => {
 
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             notValidRequest: true,
             message: 'Your code is broken.'
           }
@@ -146,7 +146,7 @@ module.exports = () => {
 
         return res.status(404).json({
           success: false,
-          errors: {
+          error: {
             homeworkDoesntExist: true,
             message: 'The requested homework doesn\'t exist.'
           }
@@ -171,7 +171,7 @@ module.exports = () => {
 
         return res.status(400).json({
           success: false,
-          errors: {
+          error: {
             notValidRequest: true,
             message: 'Your code is broken.'
           }
@@ -187,7 +187,7 @@ module.exports = () => {
 
         return res.status(404).json({
           success: false,
-          errors: {
+          error: {
             homeworkDoesntExist: true,
             message: 'The requested homework doesn\'t exist.'
           }
