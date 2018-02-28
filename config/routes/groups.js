@@ -47,7 +47,7 @@ module.exports = () => {
             message: 'The join name must be below 50 characters.'
           }
         })
-      } else if (!(/^[a-z0-9]+$/i.test(groupinfo.joinName))) {
+      } else if (!(/^[a-z0-9]+$/i.test(groupInfo.joinName))) {
         return res.status(400).json({
           success: false,
           error: {
