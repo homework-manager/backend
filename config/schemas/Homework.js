@@ -14,10 +14,17 @@ let homeworkSchema = mongoose.Schema({
 homeworkSchema.methods.markUserAsDone = function (userId) {
   const userAlreadyDone = this.doneBy.find(id => id.equals(userId))
 
-  if (userAlreadyDone) {
-    return userAlreadyDone
-  } else {
+  if (!userAlreadyDone) {
     this.doneBy.push(userId)
+  }
+}
+
+homeworkSchema.methods.markUserAsNotDone = function (userId) {
+  const userDone = this.doneBy.findIndex(id => id.equals(userId))
+
+  // index can be 0, have to check for undefined only
+  if (userDone !== undefined) {
+    this.doneBy.splice(userDone, 1)
   }
 }
 

@@ -55,11 +55,24 @@ Returns all homeworks of the user.
 
 ## `/homework/done`
 
-### `POST`
+### `PATCH`
 
 | Name | Required? | Type | Notes |
 | :--- | :-------- | :--- | :---- |
 | `homeworkId` | Yes | String | This specifies the id of the homework to set as 'done'. |
+
+| Error name | What it means |
+| :--------- | :------------ |
+| `notValidRequest` | Your request is not valid, as in "your request code is broken". It probably means you don't have a `homeworkId`. |
+| `homeworkDoesntExist` | You know what it means |
+
+## `/homework/notDone`
+
+### `PATCH`
+
+| Name | Required? | Type | Notes |
+| :--- | :-------- | :--- | :---- |
+| `homeworkId` | Yes | String | This specifies the id of the homework to unset as 'done'. |
 
 | Error name | What it means |
 | :--------- | :------------ |

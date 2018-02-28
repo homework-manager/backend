@@ -67,10 +67,15 @@ module.exports = {
       protectedRoute(),
       homeworks.getHomeworks,
       handleUnauthorized)
-    app.post(
+    app.patch(
       '/homework/done',
       protectedRoute(),
       homeworks.markAsDone,
+      handleUnauthorized)
+    app.patch(
+      '/homework/notDone',
+      protectedRoute(),
+      homeworks.markAsNotDone,
       handleUnauthorized)
 
   }
