@@ -111,9 +111,7 @@ module.exports = () => {
             message: 'This group doesn\'t exist.'
           }
         })
-      }
-
-      if (groupToJoin.private) {
+      } else if (groupToJoin.private) {
         return res.status(400).json({
           success: false,
           error: {
