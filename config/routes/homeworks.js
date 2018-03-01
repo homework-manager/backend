@@ -84,14 +84,7 @@ module.exports = () => {
 
       }
 
-      const hasPermission = group.members.some(
-        member => (
-          member.id.equals(req.user._id) &&
-          member.roles.some(
-            role => role.admin
-          )
-        )
-      )
+      const hasPermission = group.userIsAdmin(req.body._id)
 
       if (!hasPermission) {
 
@@ -154,6 +147,24 @@ module.exports = () => {
 
       }
 
+      const group = await Group.findOne({
+        _id: homeworkId.groupId
+      })
+
+      const hasPermission = group.userIsMember(req.body._id)
+
+      if (!hasPermission) {
+
+        return res.status(403).json({
+          success: false,
+          error: {
+            forbidden: true,
+            message: 'You don\'t have permission to interact with this homework.'
+          }
+        })
+
+      }
+
       homework.markUserAsDone(req.user._id)
 
       await homework.save()
@@ -196,6 +207,24 @@ module.exports = () => {
 
       }
 
+      const group = await Group.findOne({
+        _id: homeworkId.groupId
+      })
+
+      const hasPermission = group.userIsMember(req.body._id)
+
+      if (!hasPermission) {
+
+        return res.status(403).json({
+          success: false,
+          error: {
+            forbidden: true,
+            message: 'You don\'t have permission to interact with this homework.'
+          }
+        })
+
+      }
+
       homework.markUserAsNotDone(req.user._id)
 
       await homework.save()
@@ -232,6 +261,24 @@ module.exports = () => {
           error: {
             homeworkDoesntExist: true,
             message: 'The requested homework doesn\'t exist.'
+          }
+        })
+
+      }
+
+      const group = await Group.findOne({
+        _id: homeworkId.groupId
+      })
+
+      const hasPermission = group.userIsAdmin(req.body._id)
+
+      if (!hasPermission) {
+
+        return res.status(403).json({
+          success: false,
+          error: {
+            forbidden: true,
+            message: 'You don\'t have permission to interact with this homework.'
           }
         })
 

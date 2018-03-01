@@ -43,4 +43,27 @@ groupSchema.methods.addMember = function (memberId, roles) {
   return newMember
 }
 
+groupSchema.methods.userIsMember = function (memberId) {
+  const isMember = group.members.some(
+    member => (
+      member.id.equals(req.user._id)
+    )
+  )
+
+  return isMember
+}
+
+groupSchema.methods.userIsAdmin = function (memberId) {
+  const isAdmin = group.members.some(
+    member => (
+      member.id.equals(req.user._id) &&
+      member.roles.some(
+        role => role.admin
+      )
+    )
+  )
+
+  return isAdmin
+}
+
 module.exports = mongoose.model('Group', groupSchema)
