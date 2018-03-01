@@ -138,18 +138,6 @@ module.exports = () => {
         members: {$elemMatch: {id: req.user._id}}
       })
 
-      // const groupsWithVirtuals = await Promise.all(groups.map(
-      //   async group => {
-      //     group.members = await group.members.map(
-      //       async member => {
-      //         member.user = await member.getUser()
-      //         return member
-      //       }
-      //     )
-      //     return group.toObject()
-      //   }
-      // ))
-
       res.status(200).json({
         success: true,
         groups
