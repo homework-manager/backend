@@ -123,7 +123,9 @@ module.exports = () => {
         })
       }
 
-      await groupToJoin.addMember(req.user._id)
+      groupToJoin.addMember(req.user._id)
+
+      await groupToJoin.save()
 
       res.status(200).json({
         success: true,
