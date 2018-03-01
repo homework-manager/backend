@@ -65,7 +65,7 @@ module.exports = () => {
             message: 'The full name is invalid. It must be at most 200 characters.'
           }
         })
-      } else if (!(/^.{6}$/.test(accountInfo.password))) {
+      } else if (!(/^.{6}/.test(accountInfo.password))) {
         return res.status(400).json({
           success: false,
           error: {
