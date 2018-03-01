@@ -55,6 +55,12 @@ module.exports = {
         protected: true
       },
       {
+        path: '/group',
+        method: 'patch',
+        handler: groups.editGroup,
+        protected: true
+      },
+      {
         path: '/group/join',
         method: 'post',
         handler: groups.joinGroup,

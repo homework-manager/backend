@@ -1,5 +1,82 @@
 const Group = require('./../schemas/Group.js')
 
+async function doGroupChecks (res, groupInfo) {
+  if (!groupInfo.name) {
+    res.status(400).json({
+      success: false,
+      error: {
+        noName: true,
+        message: 'You didn\'t specify any name.'
+      }
+    })
+    return true
+  } else if (!groupInfo.joinName) {
+    res.status(400).json({
+      success: false,
+      error: {
+        noJoinName: true,
+        message: 'You didn\'t specify any join name.'
+      }
+    })
+    return true
+  } else if (groupInfo.name.length > 100) {
+    res.status(400).json({
+      success: false,
+      error: {
+        tooLongName: true,
+        message: 'The name must be below 100 characters.'
+      }
+    })
+    return true
+  } else if (groupInfo.joinName.length > 50) {
+    res.status(400).json({
+      success: false,
+      error: {
+        tooLongJoinName: true,
+        message: 'The join name must be below 50 characters.'
+      }
+    })
+    return true
+  } else if (!(/^[a-z0-9]+$/i.test(groupInfo.joinName))) {
+    res.status(400).json({
+      success: false,
+      error: {
+        invalidJoinName: true,
+        message: 'The join name is invalid. It must be alphanumerical and not contain spaces.'
+      }
+    })
+    return true
+  }
+
+  let groupWithJoinName
+
+  if (groupInfo._id) {
+    groupWithJoinName = await Group.findOne({
+      _id: { // $ne = not equal
+        $ne: groupInfo._id
+      },
+      joinName: groupInfo.joinName
+    })
+  } else {
+    groupWithJoinName = await Group.findOne({
+      joinName: groupInfo.joinName
+    })
+  }
+
+  if (groupWithJoinName) {
+    res.status(409).json({
+      success: false,
+      error: {
+        joinNameAlreadyUsed: true,
+        message: 'There\'s already a group with that join name.'
+      }
+    })
+    return true
+  }
+
+  return false
+}
+
 module.exports = () => {
 
   return {
@@ -15,58 +92,10 @@ module.exports = () => {
             message: 'Your code is broken.'
           }
         })
-      } else if (!groupInfo.name) {
-        return res.status(400).json({
-          success: false,
-          error: {
-            noName: true,
-            message: 'You didn\'t specify any name.'
-          }
-        })
-      } else if (!groupInfo.joinName) {
-        return res.status(400).json({
-          success: false,
-          error: {
-            noJoinName: true,
-            message: 'You didn\'t specify any join name.'
-          }
-        })
-      } else if (groupInfo.name.length > 100) {
-        return res.status(400).json({
-          success: false,
-          error: {
-            tooLongName: true,
-            message: 'The name must be below 100 characters.'
-          }
-        })
-      } else if (groupInfo.joinName.length > 50) {
-        return res.status(400).json({
-          success: false,
-          error: {
-            tooLongJoinName: true,
-            message: 'The join name must be below 50 characters.'
-          }
-        })
-      } else if (!(/^[a-z0-9]+$/i.test(groupInfo.joinName))) {
-        return res.status(400).json({
-          success: false,
-          error: {
-            invalidJoinName: true,
-            message: 'The join name is invalid. It must be alphanumerical and not contain spaces.'
-          }
-        })
       }
 
-      const groupWithJoinName = await Group.findOne({joinName: groupInfo.joinName})
-
-      if (groupWithJoinName) {
-        return res.status(409).json({
-          success: false,
-          error: {
-            joinNameAlreadyUsed: true,
-            message: 'There\'s already a group with that join name.'
-          }
-        })
+      if (await doGroupChecks(res, groupInfo)) {
+        return
       }
 
       const newGroup = new Group()
@@ -141,6 +170,53 @@ module.exports = () => {
       res.status(200).json({
         success: true,
         groups
+      })
+    },
+
+    // ========================================
+
+    async editGroup (req, res) {
+      const groupInfo = req.body.groupInfo
+
+      if (!groupInfo) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidRequest: true,
+            message: 'Your code is broken.'
+          }
+        })
+      }
+
+      const group = await Group.findOne({_id: groupInfo._id})
+
+      const hasPermission = group.userIsAdmin(req.user._id)
+
+      if (!hasPermission) {
+
+        return res.status(403).json({
+          success: false,
+          error: {
+            forbidden: true,
+            message: 'You don\'t have permission to edit the settings of this group.'
+          }
+        })
+
+      }
+
+      if (await doGroupChecks(res, groupInfo)) {
+        return
+      }
+
+      group.name = groupInfo.name || group.name
+      group.joinName = groupInfo.joinName || group.joinName
+      group.private = groupInfo.private !== undefined ? groupInfo.private : group.private
+
+      await group.save()
+
+      res.status(200).json({
+        success: true,
+        group
       })
     }
 
