@@ -47,7 +47,6 @@ module.exports = {
         handler: profile.getProfile,
         protected: true
       },
-      // TODO: endpoint to edit profile
 
       {
         path: '/group',
