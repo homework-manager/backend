@@ -73,7 +73,7 @@ module.exports = () => {
 
       newGroup.name = groupInfo.name
       newGroup.joinName = groupInfo.joinName
-      newGroup.private = groupInfo.private != undefined ? groupInfo.private : true
+      newGroup.private = groupInfo.private || false
       newGroup.addMember(req.user._id, {admin: true})
 
       await newGroup.save()
