@@ -44,9 +44,9 @@ groupSchema.methods.addMember = function (memberId, roles) {
 }
 
 groupSchema.methods.userIsMember = function (memberId) {
-  const isMember = group.members.some(
+  const isMember = this.members.some(
     member => (
-      member.id.equals(req.user._id)
+      member.id.equals(memberId)
     )
   )
 
@@ -54,9 +54,9 @@ groupSchema.methods.userIsMember = function (memberId) {
 }
 
 groupSchema.methods.userIsAdmin = function (memberId) {
-  const isAdmin = group.members.some(
+  const isAdmin = this.members.some(
     member => (
-      member.id.equals(req.user._id) &&
+      member.id.equals(memberId) &&
       member.roles.some(
         role => role.admin
       )

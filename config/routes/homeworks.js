@@ -84,7 +84,7 @@ module.exports = () => {
 
       }
 
-      const hasPermission = group.userIsAdmin(req.body._id)
+      const hasPermission = group.userIsAdmin(req.user._id)
 
       if (!hasPermission) {
 
@@ -151,7 +151,7 @@ module.exports = () => {
         _id: homeworkId.groupId
       })
 
-      const hasPermission = group.userIsMember(req.body._id)
+      const hasPermission = group.userIsMember(req.user._id)
 
       if (!hasPermission) {
 
@@ -211,7 +211,7 @@ module.exports = () => {
         _id: homeworkId.groupId
       })
 
-      const hasPermission = group.userIsMember(req.body._id)
+      const hasPermission = group.userIsMember(req.user._id)
 
       if (!hasPermission) {
 
@@ -270,7 +270,7 @@ module.exports = () => {
         _id: homeworkId.groupId
       })
 
-      const hasPermission = group.userIsAdmin(req.body._id)
+      const hasPermission = group.userIsAdmin(req.user._id)
 
       if (!hasPermission) {
 
