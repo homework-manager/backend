@@ -278,7 +278,7 @@ module.exports = () => {
           success: false,
           error: {
             forbidden: true,
-            message: 'You don\'t have permission to interact with this homework.'
+            message: 'You don\'t have permission to delete this homework.'
           }
         })
 
