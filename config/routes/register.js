@@ -57,6 +57,14 @@ module.exports = () => {
             message: 'The email is invalid.'
           }
         })
+      } else if (!(/^.{1,200}$/.test(accountInfo.fullname))) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidFullName: true,
+            message: 'The full name is invalid. It must be at most 200 characters.'
+          }
+        })
       } else if (!(/^.{6}$/.test(accountInfo.password))) {
         return res.status(400).json({
           success: false,
@@ -97,7 +105,8 @@ module.exports = () => {
 
       let newUser = new User({
         username: accountInfo.username,
-        email: accountInfo.email
+        email: accountInfo.email,
+        fullname: accountInfo.fullname
       })
 
       await newUser.changePassword(accountInfo.password)

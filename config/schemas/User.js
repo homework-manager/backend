@@ -6,6 +6,7 @@ const passwords = require('../../utils/passwords.js')
 let userSchema = mongoose.Schema({
   username: String,
   password: String,
+  fullname: String,
   email: String
 })
 
@@ -15,7 +16,8 @@ userSchema.methods.changePassword = async function (password) {
 
 userSchema.methods.getPublicData = function () {
   return {
-    username: this.username
+    username: this.username,
+    fullname: this.fullname
   }
 }
 

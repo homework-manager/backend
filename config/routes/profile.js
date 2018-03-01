@@ -7,7 +7,8 @@ module.exports = () => {
         profile: {
           _id: req.user._id,
           username: req.user.username,
-          email: req.user.email
+          email: req.user.email,
+          fullname: req.user.fullname
         }
       })
     }
