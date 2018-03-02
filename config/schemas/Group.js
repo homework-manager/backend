@@ -17,6 +17,18 @@ groupMemberSchema.methods.getUser = async function () {
   return user.getPublicData()
 }
 
+groupMemberSchema.methods.addAdmin = function () {
+  this.roles.push({admin: true})
+}
+
+groupMemberSchema.methods.removeAdmin = function () {
+  const index = this.roles.findIndex(role => role.admin)
+
+  if (index !== undefined) {
+    this.roles.splice(index, 1)
+  }
+}
+
 let groupSchema = mongoose.Schema({
   name: String,
   joinName: String,

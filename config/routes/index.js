@@ -72,6 +72,18 @@ module.exports = {
         handler: groups.getGroups,
         protected: true
       },
+      {
+        path: '/group/admin',
+        method: 'put',
+        handler: groups.addAdminToUser,
+        protected: true
+      },
+      {
+        path: '/group/admin',
+        method: 'delete',
+        handler: groups.removeAdminFromUser,
+        protected: true
+      },
 
       {
         path: '/homework',
