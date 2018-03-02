@@ -1,6 +1,50 @@
 const Homework = require('./../schemas/Homework.js')
 const Group = require('./../schemas/Group.js')
 
+async function doHomeworkChecks (res, homeworkInfo) {
+  if (!homeworkInfo.title) {
+
+    res.status(400).json({
+      success: false,
+      error: {
+        noTitle: true,
+        message: 'You didn\'t specify any title for the homework.'
+      }
+    })
+    return true
+
+  } else if (homeworkInfo.title.length > 200) {
+
+    return res.status(400).json({
+      success: false,
+      error: {
+        tooLongTitle: true,
+        message: 'The title must be below 200 characters.'
+      }
+    })
+    return true
+
+  } else if (
+    homeworkInfo.description &&
+    homeworkInfo.description.length > 5000
+  ) {
+
+    return res.status(400).json({
+      success: false,
+      error: {
+        tooLongDescription: true,
+        message: 'The description must be below 5000 characters.'
+      }
+    })
+    return true
+
+  }
+
+  return false
+}
+
+// ========================================
+
 module.exports = () => {
 
   return {
@@ -20,6 +64,8 @@ module.exports = () => {
       })
     },
 
+    // ========================================
+
     async createHomework (req, res) {
       const homeworkInfo = req.body.homework
 
@@ -33,39 +79,8 @@ module.exports = () => {
           }
         })
 
-      } else if (!homeworkInfo.title) {
-
-        return res.status(400).json({
-          success: false,
-          error: {
-            noTitle: true,
-            message: 'You didn\'t specify any title for the homework.'
-          }
-        })
-
-      } else if (homeworkInfo.title.length > 200) {
-
-        return res.status(400).json({
-          success: false,
-          error: {
-            tooLongTitle: true,
-            message: 'The title must be below 200 characters.'
-          }
-        })
-
-      } else if (
-        homeworkInfo.description &&
-        homeworkInfo.description.length > 5000
-      ) {
-
-        return res.status(400).json({
-          success: false,
-          error: {
-            tooLongDescription: true,
-            message: 'The description must be below 5000 characters.'
-          }
-        })
-
+      } else if (await doHomeworkChecks(res, homeworkInfo)) {
+        return
       }
 
       const group = await Group.findOne({
@@ -116,6 +131,8 @@ module.exports = () => {
 
     },
 
+    // ========================================
+
     async markAsDone (req, res) {
       const homeworkId = req.body.homeworkId
 
@@ -148,7 +165,7 @@ module.exports = () => {
       }
 
       const group = await Group.findOne({
-        _id: homeworkId.groupId
+        _id: homework.groupId
       })
 
       const hasPermission = group.userIsMember(req.user._id)
@@ -175,6 +192,7 @@ module.exports = () => {
       })
     },
 
+    // ========================================
 
     async markAsNotDone (req, res) {
       const homeworkId = req.body.homeworkId
@@ -208,7 +226,7 @@ module.exports = () => {
       }
 
       const group = await Group.findOne({
-        _id: homeworkId.groupId
+        _id: homework.groupId
       })
 
       const hasPermission = group.userIsMember(req.user._id)
@@ -234,6 +252,8 @@ module.exports = () => {
         homework
       })
     },
+
+    // ========================================
 
     async deleteHomework (req, res) {
       const homeworkId = req.body.homeworkId
@@ -267,7 +287,7 @@ module.exports = () => {
       }
 
       const group = await Group.findOne({
-        _id: homeworkId.groupId
+        _id: homework.groupId
       })
 
       const hasPermission = group.userIsAdmin(req.user._id)
@@ -288,6 +308,66 @@ module.exports = () => {
 
       res.status(200).json({
         success: true
+      })
+    },
+
+    // ========================================
+
+    async editHomework (req, res) {
+      const homeworkInfo = req.body.homeworkInfo
+
+      if (!homeworkInfo) {
+
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidRequest: true,
+            message: 'Your code is broken.'
+          }
+        })
+
+      } else if (await doHomeworkChecks(res, homeworkInfo)) {
+        return
+      }
+
+      const homework = await Homework.findOne({_id: homeworkInfo._id})
+
+      if (!homework) {
+
+        return res.status(404).json({
+          success: false,
+          error: {
+            homeworkDoesntExist: true,
+            message: 'The requested homework doesn\'t exist.'
+          }
+        })
+
+      }
+
+      const group = await Group.findOne({
+        _id: homework.groupId
+      })
+
+      const hasPermission = group.userIsAdmin(req.user._id)
+
+      if (!hasPermission) {
+
+        return res.status(403).json({
+          success: false,
+          error: {
+            forbidden: true,
+            message: 'You don\'t have permission to edit homeworks on this group.'
+          }
+        })
+
+      }
+
+      homework.title = homeworkInfo.title || homeworkInfo.title
+      homework.description = homeworkInfo.description || homeworkInfo.description || undefined
+
+      res.status(200).json({
+        success: true,
+        homework
       })
     }
 
