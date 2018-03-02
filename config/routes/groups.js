@@ -77,6 +77,8 @@ async function doGroupChecks (res, groupInfo) {
   return false
 }
 
+// ========================================
+
 module.exports = () => {
 
   return {
@@ -218,8 +220,83 @@ module.exports = () => {
         success: true,
         group
       })
-    }
+    },
 
+    // ========================================
+
+    async addAdminToUser (req, res) {
+      const [memberId, groupId] = [req.body.memberId, req.body.groupId]
+
+      const group = await Group.findOne({_id: groupId})
+
+      const hasPermission = group.userIsAdmin(req.user._id)
+
+      if (!hasPermission) {
+
+        return res.status(403).json({
+          success: false,
+          error: {
+            forbidden: true,
+            message: 'You don\'t have permission to give admin to pepole.'
+          }
+        })
+
+      }
+
+      const member = group.members.find(member => member.id.equals(memberId))
+
+      member.addAdmin()
+
+      await group.save()
+
+      res.status(200).json({
+        success: true,
+        group
+      })
+    },
+
+    // ========================================
+
+    async removeAdminFromUser (req, res) {
+      const [memberId, groupId] = [req.body.memberId, req.body.groupId]
+
+      if (req.user._id.equals(memberId)) {
+        return res.status(409).json({
+          success: false,
+          error: {
+            removeAdminFromSelf: true,
+            message: 'You can\'t remove admin from yourself, lol!'
+          }
+        })
+      }
+
+      const group = await Group.findOne({_id: groupId})
+
+      const hasPermission = group.userIsAdmin(req.user._id)
+
+      if (!hasPermission) {
+
+        return res.status(403).json({
+          success: false,
+          error: {
+            forbidden: true,
+            message: 'You don\'t have permission to remove admin from pepole.'
+          }
+        })
+
+      }
+
+      const member = group.members.find(member => member.id.equals(memberId))
+
+      member.removeAdmin()
+
+      await group.save()
+
+      res.status(200).json({
+        success: true,
+        group
+      })
+    }
   }
 
 }
