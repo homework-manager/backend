@@ -50,19 +50,19 @@ module.exports = () => {
 
       const validPassword = await passwords.comparePasswords(password, user.password)
 
-      if(validPassword){
+      if (validPassword) {
         const token = jwt.sign({
           id: user._id
         }, JWT_SECRET, {
           expiresIn: 604800
         })
 
-        res.status(200).json({
+        return res.status(200).json({
           success: true,
           token: 'JWT ' + token
         })
       } else {
-        res.status(401).json({
+        return res.status(401).json({
           success: false,
           error: {
             wrongUsernameOrPassword: true,
