@@ -152,7 +152,7 @@ module.exports = () => {
       }
 
       const group = await Group.findOne({
-        _id: homeworkId.groupId
+        _id: homework.groupId
       })
 
       const hasPermission = group.userIsMember(req.user._id)
@@ -213,7 +213,7 @@ module.exports = () => {
       }
 
       const group = await Group.findOne({
-        _id: homeworkId.groupId
+        _id: homework.groupId
       })
 
       const hasPermission = group.userIsMember(req.user._id)
@@ -274,7 +274,7 @@ module.exports = () => {
       }
 
       const group = await Group.findOne({
-        _id: homeworkId.groupId
+        _id: homework.groupId
       })
 
       const hasPermission = group.userIsAdmin(req.user._id)
