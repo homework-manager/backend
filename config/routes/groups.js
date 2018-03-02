@@ -2,6 +2,7 @@ const Group = require('./../schemas/Group.js')
 
 async function doGroupChecks (res, groupInfo) {
   if (!groupInfo.name) {
+
     res.status(400).json({
       success: false,
       error: {
@@ -10,7 +11,9 @@ async function doGroupChecks (res, groupInfo) {
       }
     })
     return true
+
   } else if (!groupInfo.joinName) {
+
     res.status(400).json({
       success: false,
       error: {
@@ -19,7 +22,9 @@ async function doGroupChecks (res, groupInfo) {
       }
     })
     return true
+
   } else if (groupInfo.name.length > 100) {
+
     res.status(400).json({
       success: false,
       error: {
@@ -28,7 +33,9 @@ async function doGroupChecks (res, groupInfo) {
       }
     })
     return true
+
   } else if (groupInfo.joinName.length > 50) {
+
     res.status(400).json({
       success: false,
       error: {
@@ -37,7 +44,9 @@ async function doGroupChecks (res, groupInfo) {
       }
     })
     return true
+
   } else if (!(/^[a-z0-9]+$/i.test(groupInfo.joinName))) {
+
     res.status(400).json({
       success: false,
       error: {
@@ -46,6 +55,7 @@ async function doGroupChecks (res, groupInfo) {
       }
     })
     return true
+
   }
 
   let groupWithJoinName
