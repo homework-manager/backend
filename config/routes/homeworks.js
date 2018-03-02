@@ -20,6 +20,8 @@ module.exports = () => {
       })
     },
 
+    // ========================================
+
     async createHomework (req, res) {
       const homeworkInfo = req.body.homework
 
@@ -116,6 +118,8 @@ module.exports = () => {
 
     },
 
+    // ========================================
+
     async markAsDone (req, res) {
       const homeworkId = req.body.homeworkId
 
@@ -175,6 +179,7 @@ module.exports = () => {
       })
     },
 
+    // ========================================
 
     async markAsNotDone (req, res) {
       const homeworkId = req.body.homeworkId
@@ -234,6 +239,8 @@ module.exports = () => {
         homework
       })
     },
+
+    // ========================================
 
     async deleteHomework (req, res) {
       const homeworkId = req.body.homeworkId
