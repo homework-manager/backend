@@ -93,6 +93,12 @@ module.exports = {
       },
       {
         path: '/homework',
+        method: 'patch',
+        handler: homeworks.editHomework,
+        protected: true
+      },
+      {
+        path: '/homework',
         method: 'delete',
         handler: homeworks.deleteHomework,
         protected: true
