@@ -365,6 +365,8 @@ module.exports = () => {
       homework.title = homeworkInfo.title || homeworkInfo.title
       homework.description = homeworkInfo.description || homeworkInfo.description || undefined
 
+      await homework.save()
+
       res.status(200).json({
         success: true,
         homework
