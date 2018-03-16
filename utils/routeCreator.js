@@ -24,7 +24,7 @@ function upperCaseFirst (string) {
      * and must return something to use as that data
  *
  * and returns a handler for express.js
- * @return {function} handlerForRoute
+ * @return {AsyncFunction} handlerForRoute
  */
 
 function createRoute (settings) {
