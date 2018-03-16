@@ -2,23 +2,29 @@ function upperCaseFirst (string) {
   return string.substr(0, 1).toUpperCase()) + string.substr(1)
 }
 
-/*
- * This function takes something like:
- * {
- *   reqRequirements: {
- *     data: {
- *       required: true
- *       type: String
- *     }
- *   },
- *   data: {
- *     async responseData (body, previousData) {
- *       return 'some data'
- *     }
- *   }
- * }
+/**
+ * createRoute - generate route handlers for express.js
  *
- * and returns a request handler for express.js
+ * This function takes something like:
+ *
+ * @param {Object} settings
+ * settings object
+   * @param {Object|undefined} settings.reqRequirements
+   * request body requirements
+     * @param {Object|undefined} settings.reqRequirements.data
+     * requirements
+       * @param {Boolean|false} settings.reqRequirements.data.required
+       * is that data required? defaults to false
+       * @param {type|undefined} settings.reqRequirements.data.type
+       * what type is that data? not specified = won't check
+   * @param {Object|undefined} settings.data
+   * functions that generate the response object (can return promises)
+     * @param {AsyncFunction|function|undefined} settings.data.exampleData
+     * this function takes (body, previousData)
+     * and must return something to use as that data
+ *
+ * and returns a handler for express.js
+ * @return {function} handlerForRoute
  */
 
 function createRoute (settings) {
