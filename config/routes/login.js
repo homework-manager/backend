@@ -24,14 +24,10 @@ module.exports = () => {
       }
     }),
 
-    /*
-     * This path can only return 2 things
-     * if it went succesfully:
-     * 200 or 401
-     * 200 means that the session has been created
-     * and a token is attached to it
-     * 401 means that the username or password
-     * is wrong.
+    /**
+     * login - route for logging in (duh)
+     *
+     * Only error that this route can throw is wrongUsernameOrPassword
      */
 
     login: createRoute({
@@ -79,7 +75,12 @@ module.exports = () => {
           }
         },
         statusCode (body, vars, previousData) {
-          return previousData.error.wrongUsernameOrPassword ? 401 : 200
+          if (previousData.error &&
+              previousData.error.wrongUsernameOrPassword) {
+            return 401
+          } else {
+            return 200
+          }
         }
       }
     })

@@ -1,5 +1,5 @@
 function upperCaseFirst (string) {
-  return string.substr(0, 1).toUpperCase()) + string.substr(1)
+  return string.substr(0, 1).toUpperCase() + string.substr(1)
 }
 
 /**
@@ -64,22 +64,22 @@ function createRoute (settings) {
           res.status(400).json({
             success: false,
             error: {
-              `${bodyPropName}IsNot${typeName}`: true,
+              [`${bodyPropName}IsNot${typeName}`]: true,
               message: `The property ${bodyPropName} must be type ${typeName}`
             }
           })
         }
 
-        const regExp = requirement.regExp.regExp || requirement.regExp
-
         // regexp
-        if (regExp &&
-          !(regExp.test(bodyProp))
+        if (requirement.regExp &&
+          !(requirement.regExp.test(bodyProp)))
         {
+          // const regExp = requirement.regExp
+
           res.status(400).json({
             success: false,
             error: requirement.regExp.error || {
-              `invalid${upperCaseFirst(bodyPropName)}`: true,
+              [`invalid${upperCaseFirst(bodyPropName)}`]: true,
               message: `The property ${bodyPropName} doens't match the requirements.`
             }
           })
@@ -90,7 +90,7 @@ function createRoute (settings) {
         res.status(400).json({
           success: false,
           error: {
-            `${bodyPropName}DoesntExist`: true,
+            [`${bodyPropName}DoesntExist`]: true,
             message: `The property ${bodyPropName} must exist.`
           }
         })
@@ -110,7 +110,10 @@ function createRoute (settings) {
       }
     }
 
-    res.status(jsonResponse.statusCode || 200).json(jsonResponse)
+    res.status(jsonResponse.statusCode || 200).json({
+      ...jsonResponse,
+      statusCode: undefined // remove status
+    })
   }
 }
 
