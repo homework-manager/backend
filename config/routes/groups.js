@@ -270,6 +270,16 @@ module.exports = () => {
     async removeAdminFromUser (req, res) {
       const [memberId, groupId] = [req.body.memberId, req.body.groupId]
 
+      if (!memberId || !groupId) {
+        return res.status(400).json({
+          success: false,
+          error: {
+            invalidRequest: true,
+            message: 'Your code is broken.'
+          }
+        })
+      }
+
       if (req.user._id.equals(memberId)) {
         return res.status(409).json({
           success: false,
