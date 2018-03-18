@@ -1,3 +1,8 @@
+const jwt = require('jsonwebtoken')
+const createRoute = require('../../utils/routeCreator.js').createRoute
+const User = require('./../schemas/User.js')
+const passwords = require('./../../utils/passwords.js')
+
 module.exports = () => {
   const JWT_SECRET = process.env.JWT_SECRET || 'dev waffles'
 
@@ -11,11 +16,13 @@ module.exports = () => {
      * or 400 if not logged in
      */
 
-    checkSession (req, res) {
-      return res.status(200).json({
-        success: true
-      })
-    },
+    checkSession: createRoute({
+      data: {
+        success () {
+          return true
+        }
+      }
+    }),
 
     /*
      * This path can only return 2 things
@@ -27,50 +34,55 @@ module.exports = () => {
      * is wrong.
      */
 
-    async login (req, res) {
-      const jwt = require('jsonwebtoken')
-      const User = require('./../schemas/User.js')
-      const passwords = require('./../../utils/passwords.js')
+    login: createRoute({
+      reqRequirements: {
+        username: {
+          required: true
+        },
+        password: {
+          required: true
+        }
+      },
+      async handler (body) {
+        const user = await User.findOne({
+          username: body.username
+        })
 
-      const username = req.body.username
-      const password = req.body.password
-
-      const user = await User.findOne({
-        username: username
-      })
-
-      if(!user)
-        return res.status(401).json({
-          success: false,
-          error: {
-            wrongUsernameOrPassword: true,
-            message: 'Wrong username or password.'
+        return {user}
+      },
+      data: {
+        async success (body, vars, previousData) {
+          return (
+            vars.user &&
+            await passwords.comparePasswords(body.password, vars.user.password)
+          )
+        },
+        token (body, vars, previousData) {
+          if (previousData.success) {
+            return 'JWT ' + jwt.sign({
+              id: vars.user._id
+            }, JWT_SECRET, {
+              expiresIn: 604800
+            })
+          } else {
+            return undefined
           }
-        })
-
-      const validPassword = await passwords.comparePasswords(password, user.password)
-
-      if (validPassword) {
-        const token = jwt.sign({
-          id: user._id
-        }, JWT_SECRET, {
-          expiresIn: 604800
-        })
-
-        return res.status(200).json({
-          success: true,
-          token: 'JWT ' + token
-        })
-      } else {
-        return res.status(401).json({
-          success: false,
-          error: {
-            wrongUsernameOrPassword: true,
-            message: 'Wrong username or password.'
+        },
+        error (body, vars, previousData) {
+          if (!previousData.success) {
+            return {
+              wrongUsernameOrPassword: true,
+              message: 'Wrong username or password.'
+            }
+          } else {
+            return undefined
           }
-        })
+        },
+        statusCode (body, vars, previousData) {
+          return previousData.error.wrongUsernameOrPassword ? 401 : 200
+        }
       }
-    }
+    })
 
   }
 
