@@ -51,7 +51,7 @@ module.exports = () => {
           return (
             vars.user &&
             await passwords.comparePasswords(body.password, vars.user.password)
-          )
+          ) ? true : false
         },
         token (body, vars, previousData) {
           if (previousData.success) {
