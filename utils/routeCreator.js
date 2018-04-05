@@ -99,7 +99,11 @@ function createRoute (settings) {
       }
     }
 
-    let handlerResponse = await settings.handler(body)
+    let handlerResponse = null
+
+    if (settings.handler) {
+      handlerResponse = await settings.handler(body)
+    }
 
     let jsonResponse = {}
 
